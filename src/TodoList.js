@@ -11,7 +11,7 @@ const TodoList = () => {
 
   const [state, mutation] = useRMS(
     storeContext,
-    state => { console.log(state); return state.todos.todos }
+    state => state.todos.todos 
   )
 
   const handleSubmit = (e) => {
@@ -32,7 +32,6 @@ const TodoList = () => {
   })
 
   const removeTodo = (id) => mutation({ type: 'REMOVE_TODO', payload: id })
-
 
   return (
     <section>

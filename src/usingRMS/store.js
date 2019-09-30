@@ -10,7 +10,7 @@ export function todosReducer(
     state = INITIAL_STATE,
     action
 ) {
-    debugger
+    
     switch (action.type) {
         case 'ADD_TODO': {
             const todo = action.payload;
@@ -69,9 +69,12 @@ export const store = new Store({todos:INITIAL_STATE}, { todos: todosReducer })
 //     }))
 // })
 
-// export const store = new Store(INITIAL_STATE, {
-//     addTodo,
-//     toggleTodo,
-//     removeTodo
-// })
+// export const store = new Store(
+//     { todos: INITIAL_STATE },
+//     {
+//         addTodo,
+//         toggleTodo,
+//         removeTodo
+//     }
+// )
 

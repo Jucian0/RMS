@@ -26,7 +26,6 @@ export class Store {
     reduce(state, action) {
         const newState = {};
         for (const prop in this.reducers) {
-            debugger
             newState[prop] = this.reducers[prop](state[prop], action);
         }
         return newState;
