@@ -18,7 +18,7 @@ export class Store {
         };
     }
 
-    dispatch(action) {
+    mutation(action) {
         this.state = this.reduce(this.state, action);
         this.subscribers.forEach(fn => fn(this.value));
     }

@@ -14,7 +14,7 @@ export const useRMS = (storeContext, fn) => {
         return fn(state$)
     }
 
-    const mutation = (action) => storeContext.dispatch(action)
+    const mutation = (action) => storeContext.mutation(action)
 
     return [
         state(), mutation
