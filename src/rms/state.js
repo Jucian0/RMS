@@ -1,5 +1,5 @@
 
-export class Store {
+export class State {
 
     constructor(initialState = {}, reducers = {}) {
         this.subscribers = [];
@@ -19,7 +19,7 @@ export class Store {
         };
     }
 
-    mutation(action) {
+    dispatch(action) {
         this.state = this.reduce(this.state, action);
         this.subscribers.forEach(fn => fn(this.value));
     }
@@ -27,7 +27,7 @@ export class Store {
     reduce(state, action) {
         const newState = {};
         for (const prop in this.reducers) {
-            newState[prop] = this.reducers[prop](state[prop], action, this.mutation);
+            newState[prop] = this.reducers[prop](state[prop], action, (action) => this.dispatch(action));
         }
         return newState;
     }
