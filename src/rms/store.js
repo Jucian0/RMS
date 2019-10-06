@@ -1,3 +1,4 @@
+
 export class Store {
 
     constructor(initialState = {}, reducers = {}) {
@@ -26,7 +27,7 @@ export class Store {
     reduce(state, action) {
         const newState = {};
         for (const prop in this.reducers) {
-            newState[prop] = this.reducers[prop](state[prop], action);
+            newState[prop] = this.reducers[prop](state[prop], action, this.mutation);
         }
         return newState;
     }

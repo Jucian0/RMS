@@ -2,7 +2,7 @@
 
 import "./styles.css";
 import React, { useState } from "react";
-import { useSelector, useMutation, useRMS } from "./rms/hooks";
+import { useRMS } from "./rms/hooks";
 import { store as storeContext } from "./usingRMS/store";
 
 const TodoList = () => {

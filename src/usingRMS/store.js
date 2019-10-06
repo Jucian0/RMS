@@ -6,75 +6,35 @@ const INITIAL_STATE = {
     loading: false
 };
 
-export function todosReducer(
-    state = INITIAL_STATE,
-    action
-) {
-    
+const removeTodo = (state, action) => ({
+    ...state,
+    todos: state.todos.filter(item => item.id !== action.payload)
+})
+
+const addTodo = (state, action) => ({
+    ...state,
+    todos: state.todos.concat(action.payload)
+})
+
+const toggleTodo = (state, action) => ({
+    ...state,
+    todos: state.todos.map(item => ({
+        ...item,
+        complete: item.id === action.payload ? !item.complete : item.complete
+    }))
+})
+
+export function todosReducer(state = INITIAL_STATE, action, mutations) {
+    console.log(mutations)
     switch (action.type) {
-        case 'ADD_TODO': {
-            const todo = action.payload;
-            const todos = [...state.todos, todo];
-            return {
-                ...state,
-                todos,
-            };
-        }
-
-        case 'TOGGLE_TODO': {
-            const todos = state.todos.map(item => ({
-                ...item,
-                complete: item.id === action.payload ? !item.complete : item.complete
-            }))
-
-            return {
-                ...state,
-                todos,
-            };
-        }
-
-        case 'REMOVE_TODO': {
-            const todos = state.todos.filter(item => item.id !== action.payload)
-
-            return {
-                ...state,
-                todos,
-            };
-        }
+        case 'ADD_TODO': return addTodo(state, action)
+        case 'TOGGLE_TODO': return toggleTodo(state, action)
+        case 'REMOVE_TODO': return removeTodo(state, action)
     }
     return state;
 }
 
-export const store = new Store({todos:INITIAL_STATE}, { todos: todosReducer })
+export const store = new Store({ todos: INITIAL_STATE }, { todos: todosReducer })
 
 
-
-
-
-// const removeTodo = (state = INITIAL_STATE, action) => ({
-//     ...state,
-//     todos: state.todos.filter(item => item.id !== action.payload)
-// })
-
-// const addTodo = (state = INITIAL_STATE, action) => ({
-//     ...state,
-//     todos: state.todos.concat(action.payload)
-// })
-
-// const toggleTodo = (state = INITIAL_STATE, action) => ({
-//     ...state,
-//     todos: state.todos.map(item => ({
-//         ...item,
-//         complete: item.id === action.payload ? !item.complete : item.complete
-//     }))
-// })
-
-// export const store = new Store(
-//     { todos: INITIAL_STATE },
-//     {
-//         addTodo,
-//         toggleTodo,
-//         removeTodo
-//     }
-// )
 
