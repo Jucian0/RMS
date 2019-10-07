@@ -9,31 +9,20 @@ const TodoList = () => {
 
   const [inputText, setInputText] = useState('')
 
-  const [state, dispatch] = useRMS(
+  const [state, { addTodo, toggleTodo, removeTodo, asyncTodo }] = useRMS(
     stateContext,
-    state => state.todos.todos 
+    state => state.todos
   )
+
 
   const handleSubmit = (e) => {
 
-    dispatch({
-      type: 'ADD_TODO',
-      payload: { text: inputText, complete: false, id: Math.random() }
-    })
+    addTodo({ text: inputText, complete: false, id: Math.random() })
 
     e.preventDefault();
 
     setInputText('');
   };
-
-  const toggleTodo = (id) => dispatch({
-    type: 'TOGGLE_TODO',
-    payload: id
-  })
-
-  const removeTodo = (id) => dispatch({ type: 'REMOVE_TODO', payload: id })
-  const asyncTodo = (id) => dispatch({ type: 'ASYNC_TODO' })
-
 
   return (
     <section>
@@ -41,7 +30,7 @@ const TodoList = () => {
       <form onSubmit={handleSubmit}>
         <input value={inputText} onChange={(e) => setInputText(e.target.value)} />
         <button type="button" onClick={handleSubmit}>Novo</button>
-        <button type="button" onClick={asyncTodo}>Async Promise</button>
+        <button type="button" onClick={() => asyncTodo()}>Async Promise</button>
         <button type="button" >RESET</button>
       </form>
 

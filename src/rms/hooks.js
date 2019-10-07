@@ -1,22 +1,21 @@
 import { useState } from 'react';
 
-
 export const useRMS = (stateContext, fn) => {
     const [state$, setState] = useState(stateContext.value)
 
     const state = () => {
-        stateContext.subscribe(
+        const unSub = stateContext.subscribe(
             newState => {
-                if (state$ !== newState)
+                if (state$ !== newState) {
                     setState(newState)
+                    unSub()
+                }
             }
         )
-        return fn(state$)
+        return fn(stateContext.value)
     }
 
-    const dispatch = (action) => stateContext.dispatch(action)
-
     return [
-        state(), dispatch
+        state(), stateContext.createMutations()
     ]
 }

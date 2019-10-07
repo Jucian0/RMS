@@ -19,16 +19,29 @@ export class State {
         };
     }
 
-    dispatch(action) {
-        this.state = this.reduce(this.state, action);
-        this.subscribers.forEach(fn => fn(this.value));
+    dispatch(type, payload) {
+        this.state = this.reduce(this.state, { type, payload });
+        this.subscribers.forEach(fn => {
+            fn(this.value)
+        });
+    }
+
+    createMutations() {
+        let mutations = {}
+        for (let type in this.reducers) {
+            mutations[type] = payload => this.dispatch(type, payload)
+        }
+        return mutations
     }
 
     reduce(state, action) {
-        const newState = {};
-        for (const prop in this.reducers) {
-            newState[prop] = this.reducers[prop](state[prop], action, (action) => this.dispatch(action));
+        if (action.type) {
+            return this.reducers[action.type](
+                state,
+                action.payload,
+                this.createMutations()
+            )
         }
-        return newState;
+        return state;
     }
 }
