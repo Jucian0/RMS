@@ -44,17 +44,14 @@ const asyncFinish = (state, payload) => {
 
 const reset = () => INITIAL_STATE
 
-export const state = new State(
-    INITIAL_STATE,
-    {
-        addTodo,
-        removeTodo,
-        toggleTodo,
-        asyncTodo,
-        asyncFinish,
-        reset
-    }
-)
+export const state = new State(INITIAL_STATE)
+    .setSync({ addTodo })
+    .setSync({ removeTodo })
+    .setSync({ toggleTodo })
+    .setSync({ asyncTodo })
+    .setSync({ asyncFinish })
+    .setSync({ reset })
+    .setAsync({})
 
 
 

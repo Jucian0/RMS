@@ -1,10 +1,22 @@
 
 export class State {
 
-    constructor(initialState = {}, reducers = {}) {
+    constructor(initialState = {}) {
         this.subscribers = [];
-        this.reducers = reducers;
+        this.reducers = {};
+        this.services = {};
         this.state = this.reduce(initialState, {});
+    }
+
+    setSync(reducer){
+        this.reducers = Object.assign(this.reducers,reducer)
+        return this
+    }
+
+    setAsync(service){
+        this.services = Object.assign(this.services, service)
+        console.log(this)
+        return this
     }
 
     get value() {
