@@ -1,8 +1,12 @@
-import React from "react";
-import TodoList from "./TodoList";
+import React, { Fragment } from "react";
+import TodoList from "./components/TodoList";
+import TodoForm from "./components/TodoForm";
 
 const App = () => (
-  <TodoList />
+  <Fragment>
+    <TodoForm />
+    <TodoList />
+  </Fragment>
 );
 
 export default App;

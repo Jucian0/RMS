@@ -25,25 +25,24 @@ const toggleTodo = (state, payload) => ({
     }))
 })
 
-const asyncTodo = (state, payload, {asyncFinish}) => {
+const asyncTodo = (state, payload, { asyncFinish }) => {
     Axios.get('http://www.hackintoshworld.com/wp-json/wp/v2/posts')
-        .then(resp =>
-            resp.data.filter(item => item.slug !== "macos-10-13-4-update")
-        )
-        .then(data => asyncFinish(data))
-
+        .then(resp => asyncFinish(resp.data))
     return state
 }
 
 const asyncFinish = (state, payload) => {
     return {
-    ...state,
-    todos: [...state.todos, ...payload.map(item => ({
-        id: item.id,
-        text: item.slug,
-        complete: false
-    }))]
-}}
+        ...state,
+        todos: [...state.todos, ...payload.map(item => ({
+            id: item.id,
+            text: item.slug,
+            complete: false
+        }))]
+    }
+}
+
+const reset = () => INITIAL_STATE
 
 export const state = new State(
     INITIAL_STATE,
@@ -52,7 +51,8 @@ export const state = new State(
         removeTodo,
         toggleTodo,
         asyncTodo,
-        asyncFinish
+        asyncFinish,
+        reset
     }
 )
 
