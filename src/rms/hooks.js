@@ -19,8 +19,10 @@ export const useRMS = (stateContext, fn) => {
         if(typeof fn !== 'function'){
             throw new Error("Second parameter just a function callback")
         }
-        return [state(),stateContext.createMutations()]
+        return [state(),stateContext.actions]
     }
 
-    return [stateContext.createMutations()]
+    return [stateContext.actions]
 }
+
+export const useSideEffect = (stateContext)=>[stateContext.sideEffects]

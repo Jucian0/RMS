@@ -25,11 +25,10 @@ const toggleTodo = (state, payload) => ({
     }))
 })
 
-const asyncTodo = (state, payload, { asyncFinish }) => {
+const asyncTodo = (state, payload, { asyncFinish }) => 
     Axios.get('http://www.hackintoshworld.com/wp-json/wp/v2/posts')
         .then(resp => asyncFinish(resp.data))
-    return state
-}
+
 
 const asyncFinish = (state, payload) => {
     return {
@@ -45,13 +44,9 @@ const asyncFinish = (state, payload) => {
 const reset = () => INITIAL_STATE
 
 export const state = new State(INITIAL_STATE)
-    .setSync({ addTodo })
-    .setSync({ removeTodo })
-    .setSync({ toggleTodo })
-    .setSync({ asyncTodo })
-    .setSync({ asyncFinish })
-    .setSync({ reset })
-    .setAsync({})
-
-
-
+    .setReducer({ addTodo })
+    .setReducer({ removeTodo })
+    .setReducer({ toggleTodo })
+    .setReducer({ asyncFinish })
+    .setReducer({ reset })
+    .setEffect({ asyncTodo })

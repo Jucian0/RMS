@@ -2,14 +2,15 @@
 
 import "./../styles.css";
 import React, { useState } from "react";
-import { useRMS } from "../rms/hooks";
+import { useRMS, useSideEffect } from "../rms/hooks";
 import { state as stateContext } from "../usingRMS/state";
 
 const TodoForm = () => {
 
     const [inputText, setInputText] = useState('')
 
-    const [{ addTodo, asyncTodo, reset }] = useRMS(stateContext)
+    const [{ addTodo, reset }] = useRMS(stateContext)
+    const [{asyncTodo}] = useSideEffect(stateContext)
 
     const add = () => {
         addTodo({ text: inputText, complete: false, id: Math.random() })
