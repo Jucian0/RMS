@@ -1,23 +1,21 @@
 
 
 import "./../styles.css";
-import React, { useState } from "react";
-import { useRMS } from "./../rms/hooks";
-import { state as stateContext } from "./../usingRMS/state";
+import React from "react";
+import { state as stateContext, StateTodo, TodoType } from "../state/state";
+import { useStateFul } from "../rm";
 
 const TodoList = () => {
 
-
-  const [state, { toggleTodo, removeTodo }] = useRMS(
+  const [state, { toggleTodo, removeTodo }] = useStateFul<StateTodo, Array<TodoType>>(
     stateContext,
     state => state.todos
   )
 
-
   return (
     <section>
       <ul>
-        {state.map(todo => (
+        {Array.isArray(state) && state.map((todo: any) => (
           <li key={todo.id}>
             {todo.complete ? <s>{todo.text}</s> : todo.text}
             <div>
