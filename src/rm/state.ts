@@ -9,8 +9,8 @@ export class State<S> {
     private reducers: Reducers;
     private sideEffects: SideEffects;
     private state: S;
-    public actions: EffectAndActions;
-    public effects: EffectAndActions;
+    public actions: any;
+    public effects: any;
 
     constructor(initialState: any = {}) {
         objectValidation(initialState, 'InitialState')
