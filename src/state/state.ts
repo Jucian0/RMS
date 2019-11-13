@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { StateMachine, Method, Service } from "../rm/StateMachine";
+import { StateMachine, Method } from "../rm/StateMachine";
 
 export type TodoType = {
     id: string
@@ -45,16 +45,16 @@ const getTodo: Method<StateTodo, Array<TodoType>> = (state, payload) => ({
 })
 
 
-export const getAll = async () => {
-    let { data } = await Axios.get('http://www.hackintoshworld.com/wp-json/wp/v2/posts')
+// export const getAll = async () => {
+//     let { data } = await Axios.get('http://www.hackintoshworld.com/wp-json/wp/v2/posts')
 
-    return state.actions["getTodo"](data)
-}
+//     return state.mutations["getTodo"](data)
+// }
 
 
 const reset = () => INITIAL_STATE
 
-export const state = new StateMachine<StateTodo>({
+export const state = new StateMachine({
     name: 'todo',
     state: INITIAL_STATE,
     methods: {

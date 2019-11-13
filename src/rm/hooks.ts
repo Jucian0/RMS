@@ -1,22 +1,17 @@
 import { useState, useEffect } from 'react';
-import { StateMachine } from './StateMachine';
+import { StateMachine, Context } from './StateMachine';
 
-type ReturnHook<TR> = [TR, { [x: string]: (payload: any) => void; }] |
-    [{ [x: string]: (payload: any) => void; }];
+export const useMutation =
+    <TContext extends Context<TContext["state"]>, TR>(stateContext: StateMachine<TContext>, fn?: (state: TContext['state']) => TR) => {
 
+        const [state, setState] = useState<TContext['state']>(stateContext.state)
 
-export const useMutation = <TState, TR>(stateContext: StateMachine<TState>, fn?: (state: TState) => TR) => {
+        useEffect(() => stateContext.subscribe(setState), [])
 
-    const [state, setState] = useState<TState>(stateContext.state)
-
-    useEffect(() => stateContext.subscribe(setState), [])
-
-    if (fn) {
-        if (typeof fn !== 'function') {
-            throw new Error("Second parameter just a function callback")
+        if (fn) {
+            if (typeof fn !== 'function') {
+                throw new Error("Second parameter just a function callback")
+            }
+            return fn(state)
         }
-        return [fn(state), stateContext.actions]
     }
-
-    return [stateContext.actions]
-}
