@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { State, Reducer, SideEffect } from "../rm";
+import { StateMachine, Method, Service } from "../rm/StateMachine";
 
 export type TodoType = {
     id: string
@@ -17,17 +17,17 @@ const INITIAL_STATE: StateTodo = {
     loading: false
 };
 
-const removeTodo: Reducer<StateTodo> = (state, payload) => ({
+const removeTodo: Method<StateTodo, string> = (state, payload) => ({
     ...state,
     todos: state.todos.filter(item => item.id !== payload)
 })
 
-const addTodo: Reducer<StateTodo> = (state, payload) => ({
+const addTodo: Method<StateTodo, TodoType> = (state, payload) => ({
     ...state,
     todos: state.todos.concat(payload)
 })
 
-const toggleTodo: Reducer<StateTodo> = (state, payload) => ({
+const toggleTodo: Method<StateTodo, string> = (state, payload) => ({
     ...state,
     todos: state.todos.map(item => ({
         ...item,
@@ -35,28 +35,33 @@ const toggleTodo: Reducer<StateTodo> = (state, payload) => ({
     }))
 })
 
-const asyncTodo: SideEffect<StateTodo> = (_, __, { asyncFinish }) =>
-    Axios.get('http://www.hackintoshworld.com/wp-json/wp/v2/posts')
-        .then(resp => asyncFinish(resp.data))
+const getTodo: Method<StateTodo, Array<TodoType>> = (state, payload) => ({
+    ...state,
+    todos: [...state.todos, ...payload.map((item: any) => ({
+        id: item.id,
+        text: item.slug,
+        complete: false
+    }))]
+})
 
 
-const asyncFinish: Reducer<StateTodo> = (state, payload) => {
-    return {
-        ...state,
-        todos: [...state.todos, ...payload.map((item: any) => ({
-            id: item.id,
-            text: item.slug,
-            complete: false
-        }))]
-    }
+export const getAll = async () => {
+    let { data } = await Axios.get('http://www.hackintoshworld.com/wp-json/wp/v2/posts')
+
+    return state.actions["getTodo"](data)
 }
+
 
 const reset = () => INITIAL_STATE
 
-export const state = new State<StateTodo>(INITIAL_STATE)
-    .setReducer(addTodo)
-    .setReducer(removeTodo)
-    .setReducer(toggleTodo)
-    .setReducer(asyncFinish)
-    .setReducer(reset)
-    .setSideEffect(asyncTodo)
+export const state = new StateMachine<StateTodo>({
+    name: 'todo',
+    state: INITIAL_STATE,
+    methods: {
+        addTodo,
+        removeTodo,
+        toggleTodo,
+        reset,
+        getTodo
+    }
+})

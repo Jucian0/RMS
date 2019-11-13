@@ -3,11 +3,11 @@
 import "./../styles.css";
 import React from "react";
 import { state as stateContext, StateTodo, TodoType } from "../state/state";
-import { useStateFul } from "../rm";
+import { useMutation } from "../rm";
 
 const TodoList = () => {
 
-  const [state, { toggleTodo, removeTodo }] = useStateFul<StateTodo, Array<TodoType>>(
+  const [state, { toggleTodo, removeTodo }] = useMutation<StateTodo, Array<TodoType>>(
     stateContext,
     state => state.todos
   )
