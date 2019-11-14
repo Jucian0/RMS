@@ -12,7 +12,6 @@ const TodoList = () => {
     state => state.todos
   )
 
-
   return (
     <section>
       <ul>
@@ -20,8 +19,8 @@ const TodoList = () => {
           <li key={todo.id}>
             {todo.complete ? <s>{todo.text}</s> : todo.text}
             <div>
-              <button onClick={() => stateContext.mutations.toggleTodo(stateContext.state, todo.id)}>Toggle</button>
-              <button onClick={() => stateContext.mutations.removeTodo(stateContext.state,todo.id)} >Remove</button>
+              <button onClick={() => stateContext.mutations.toggleTodo(todo.id)}>Toggle</button>
+              <button onClick={() => stateContext.mutations.removeTodo(todo.id)} >Remove</button>
             </div>
           </li>
         ))}

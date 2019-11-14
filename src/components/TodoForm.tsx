@@ -3,16 +3,15 @@
 import "./../styles.css";
 import React, { useState } from "react";
 import { state as stateContext } from "../state/state";
-import { useMutation } from "../rm";
 
 
 const TodoForm = () => {
 
     const [inputText, setInputText] = useState('')
 
-
+    console.log(stateContext.mutations)
     const add = () => {
-        stateContext.mutations.addTodo(stateContext.state,{ text: inputText, complete: false, id: Math.random().toString() })
+        stateContext.mutations.addTodo({ text: inputText, complete: false, id: Math.random().toString() })
         setInputText('')
     }
 

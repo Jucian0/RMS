@@ -4,11 +4,6 @@ export type Method<TState, TPayload = any> = (state: TState, payload: TPayload) 
 type Methods<TState, TPayload = any> =
     { [x: string]: Method<TState, TPayload>; }
 
-export type Mutation<TPayload> = (payload: TPayload) => void
-
-
-type Mutations<TPayload = any> =
-    { [x: string]: Mutation<TPayload>; }
 
 export type Subscribe<TState> = (state: TState) => void;
 
@@ -18,18 +13,16 @@ export interface Context<TState> {
     methods: Methods<TState>;
 }
 
-
 export class StateMachine<TContext extends Context<TContext['state']>>{
 
     private context: TContext;
     private subscribers: Array<Subscribe<TContext["state"]>>;
-    public mutations: TContext["methods"]
+    public mutations: { [K in Extract<keyof TContext["methods"], string>]: (payload: any) => void }
 
     constructor(context: TContext) {
         this.context = context
         this.subscribers = []
-        this.mutations = {}
-        this.actionCreator(context.methods)
+        this.mutations = this.actionCreator(context.methods)
     }
 
     get state() {
@@ -37,15 +30,11 @@ export class StateMachine<TContext extends Context<TContext['state']>>{
     }
 
     private actionCreator(methods: TContext["methods"]) {
-
-        let mutations: { [x: string]: (payload: any) => void } = {}
-
+        let mutations: { [K in Extract<keyof TContext["methods"], string>]: (payload: any) => void } = this.mutations
         for (let method in methods) {
-
             mutations[method] = (payload: any) => this.dispatch(method, payload)
         }
-
-        this.mutations = Object.assign({ mutations})
+        return mutations
 
     }
 
@@ -58,6 +47,7 @@ export class StateMachine<TContext extends Context<TContext['state']>>{
     }
 
     private dispatch(type: string, payload: any) {
+
         const state = this.reduce(this.context.state, { type, payload })
         if (!state) {
             throw new Error('Reducer and SideEffect functions must return a value')
