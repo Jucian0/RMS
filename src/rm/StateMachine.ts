@@ -4,6 +4,7 @@ export type Method<TState, TPayload = any> = (state: TState, payload: TPayload) 
 type Methods<TState, TPayload = any> =
     { [x: string]: Method<TState, TPayload>; }
 
+type Actions<TContext, TPayload> = { [K in Extract<keyof TContext, string>]: (payload: TPayload) => void }
 
 export type Subscribe<TState> = (state: TState) => void;
 
@@ -17,7 +18,7 @@ export class StateMachine<TContext extends Context<TContext['state']>>{
 
     private context: TContext;
     private subscribers: Array<Subscribe<TContext["state"]>>;
-    public mutations: { [K in Extract<keyof TContext["methods"], string>]: (payload: any) => void }
+    public mutations: Actions<TContext["methods"],any>
 
     constructor(context: TContext) {
         this.context = context
@@ -30,12 +31,11 @@ export class StateMachine<TContext extends Context<TContext['state']>>{
     }
 
     private actionCreator(methods: TContext["methods"]) {
-        let mutations: { [K in Extract<keyof TContext["methods"], string>]: (payload: any) => void } = this.mutations
+        let mutations = Object.assign({}, this.mutations)
         for (let method in methods) {
             mutations[method] = (payload: any) => this.dispatch(method, payload)
         }
         return mutations
-
     }
 
     subscribe(fn: Subscribe<TContext['state']>) {

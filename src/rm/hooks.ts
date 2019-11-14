@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { StateMachine, Context } from './StateMachine';
 
+type HookR<TState, TMutations> = {state:TState, mutations: TMutations}
+
 export const useMutation =
     <TContext extends Context<TContext["state"]>, TR>(stateContext: StateMachine<TContext>, fn?: (state: TContext['state']) => TR) => {
 

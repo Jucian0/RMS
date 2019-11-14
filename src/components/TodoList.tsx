@@ -2,7 +2,7 @@
 
 import "./../styles.css";
 import React from "react";
-import { state as stateContext } from "../state/state";
+import { state as stateContext, TodoType } from "../state/state";
 import { useMutation } from "../rm";
 
 const TodoList = () => {
@@ -11,6 +11,7 @@ const TodoList = () => {
     stateContext,
     state => state.todos
   )
+
 
   return (
     <section>

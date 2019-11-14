@@ -45,11 +45,10 @@ const getTodo: Method<StateTodo, Array<TodoType>> = (state, payload) => ({
 })
 
 
-// export const getAll = async () => {
-//     let { data } = await Axios.get('http://www.hackintoshworld.com/wp-json/wp/v2/posts')
-
-//     return state.mutations["getTodo"](data)
-// }
+export const getAll = async () => {
+    let { data } = await Axios.get('http://www.hackintoshworld.com/wp-json/wp/v2/posts')
+    return state.mutations.getTodo(data)
+}
 
 
 const reset = () => INITIAL_STATE
